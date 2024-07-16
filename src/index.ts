@@ -1,6 +1,12 @@
 
-export function add (a: number, b: number): number {
-  return a + b
-}
+import { add } from './a'
 
-console.log(add(1, 9))
+const c = Math.random() * 100
+
+const sum = add(1, 2)
+console.log(sum, sum)
+
+export default add(3, c)
+export {
+  sum, add
+}
