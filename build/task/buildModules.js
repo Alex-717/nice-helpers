@@ -9,9 +9,9 @@ import { dts } from 'rollup-plugin-dts'
 import { globSync } from 'glob'
 import path from 'path'
 import terser from '@rollup/plugin-terser';
-
 import { srcRoot, projectRoot } from '../utils/path.js'
 
+const distRoot = path.resolve(projectRoot, 'dist')
 const input = path.resolve(srcRoot, 'index.ts')
 
 // fromEntries将键值对列表转换为一个对象
@@ -32,11 +32,35 @@ const modulesInput = Object.fromEntries(
     return [key, val]
   })
 )
-console.log('🥰🥰🥰---input:', modulesInput)
 
-// process.exit(1)
-
-const distRoot = path.resolve(projectRoot, 'dist')
+const moduleBabelConfig = [
+  babel({
+    babelHelpers: 'runtime',
+    presets: ['@babel/preset-env'],
+    plugins: [
+      ['@babel/plugin-transform-runtime', {
+        absoluteRuntime: false,
+        corejs: 3,
+        helpers: true,
+        regenerator: true
+      }]
+    ]
+  })
+]
+const bundleBabelConfig = [
+  babel({
+    babelHelpers: 'bundled',
+    presets: [
+      ['@babel/preset-env', {
+        useBuiltIns: 'usage',
+        corejs: 3
+      }]
+    ],
+    plugins: [
+      ["@babel/plugin-transform-runtime"]
+    ]
+  })
+]
 
 // https://www.rollupjs.com/configuration-options/#input
 export default defineConfig(
@@ -49,7 +73,11 @@ export default defineConfig(
         entryFileNames: '[name].js',
         exports: 'named'
       },
-      cleanDist: true
+      external: [/@babel\/runtime/],
+      cleanDist: true,
+      plugins: [
+        ...moduleBabelConfig
+      ]
     }),
     ...buildConfig({
       input: modulesInput,
@@ -58,7 +86,11 @@ export default defineConfig(
         format: 'commonjs',
         entryFileNames: '[name].js',
         exports: 'named'
-      } 
+      },
+      external: [/@babel\/runtime/],
+      plugins: [
+        ...moduleBabelConfig
+      ]
     }),
     ...buildConfig({
       input,
@@ -67,7 +99,10 @@ export default defineConfig(
         format: 'umd',
         name: 'niceHelpers',
         exports: 'named',
-      } 
+      },
+      plugins: [
+        ...bundleBabelConfig
+      ]
     }),
     ...buildConfig({
       input,
@@ -77,7 +112,10 @@ export default defineConfig(
         name: 'niceHelpers',
         exports: 'named',
       },
-      minify: true
+      minify: true,
+      plugins: [
+        ...bundleBabelConfig
+      ]
     }),
     ...buildType({
       input: modulesInput,
@@ -112,17 +150,13 @@ function buildConfig (options) {
         }
       ),
       commonjs(),
-      babel({
-        babelHelpers: 'bundled',
-        exclude: 'node_modules/**'
-      }),
       minify && terser(),
+      ...(config.plugins || []),
       esBuild({
         loaders: {
           '.ts': 'ts'
         }
       }),
-      ...(config.plugins || [])
     ]
   }
 
