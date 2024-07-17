@@ -1,9 +1,9 @@
 
 import { defineConfig } from 'rollup'
 import nodeResolve from '@rollup/plugin-node-resolve'
-import babel from '@rollup/plugin-babel'
+import babel, { getBabelOutputPlugin } from '@rollup/plugin-babel'
 import commonjs from '@rollup/plugin-commonjs'
-import esBuild from 'rollup-plugin-esbuild'
+import esBuild, { minify as Minify } from 'rollup-plugin-esbuild'
 import del from 'rollup-plugin-delete'
 import { dts } from 'rollup-plugin-dts'
 import { globSync } from 'glob'
@@ -34,8 +34,7 @@ const modulesInput = Object.fromEntries(
 )
 
 const moduleBabelConfig = [
-  babel({
-    babelHelpers: 'runtime',
+  getBabelOutputPlugin({
     presets: ['@babel/preset-env'],
     plugins: [
       ['@babel/plugin-transform-runtime', {
@@ -48,16 +47,12 @@ const moduleBabelConfig = [
   })
 ]
 const bundleBabelConfig = [
-  babel({
-    babelHelpers: 'bundled',
+  getBabelOutputPlugin({
+    allowAllFormats: true,
     presets: [
-      ['@babel/preset-env', {
-        useBuiltIns: 'usage',
-        corejs: 3
+      ['@babel/preset-env', { 
+        modules: 'umd'
       }]
-    ],
-    plugins: [
-      ["@babel/plugin-transform-runtime"]
     ]
   })
 ]
@@ -71,13 +66,13 @@ export default defineConfig(
         dir: `${distRoot}/es`,
         format: 'esm',
         entryFileNames: '[name].js',
-        exports: 'named'
+        exports: 'named',
+        plugins: [
+          ...moduleBabelConfig
+        ]
       },
       external: [/@babel\/runtime/],
-      cleanDist: true,
-      plugins: [
-        ...moduleBabelConfig
-      ]
+      cleanDist: true
     }),
     ...buildConfig({
       input: modulesInput,
@@ -85,12 +80,12 @@ export default defineConfig(
         dir: `${distRoot}/lib`,
         format: 'commonjs',
         entryFileNames: '[name].js',
-        exports: 'named'
+        exports: 'named',
+        plugins: [
+          ...moduleBabelConfig
+        ]
       },
-      external: [/@babel\/runtime/],
-      plugins: [
-        ...moduleBabelConfig
-      ]
+      external: [/@babel\/runtime/]
     }),
     ...buildConfig({
       input,
@@ -99,10 +94,10 @@ export default defineConfig(
         format: 'umd',
         name: 'niceHelpers',
         exports: 'named',
-      },
-      plugins: [
-        ...bundleBabelConfig
-      ]
+        plugins: [
+          ...bundleBabelConfig
+        ]
+      }
     }),
     ...buildConfig({
       input,
@@ -111,11 +106,11 @@ export default defineConfig(
         format: 'iife',
         name: 'niceHelpers',
         exports: 'named',
+        // plugins: [
+        //   ...bundleBabelConfig
+        // ],
       },
-      minify: true,
-      plugins: [
-        ...bundleBabelConfig
-      ]
+      minify: true
     }),
     ...buildType({
       input: modulesInput,
@@ -169,10 +164,10 @@ function buildConfig (options) {
 function buildType ({ input, output }) {
   const rollupConfig = {
     input,
+    output,
     plugins: [
       dts()
-    ],
-    output
+    ]
   }
   return [rollupConfig]
 }

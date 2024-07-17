@@ -23,3 +23,12 @@ export const newArray = arr.filter(item => item > 8)
 
 const map = (item: number) => item > 2
 export { map }
+
+export class Person {
+  constructor(public name: string) {
+    this.name = name
+  }
+  eat() {
+    console.log('eat')
+  }
+}

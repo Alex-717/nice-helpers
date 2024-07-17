@@ -5,8 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "rollup -c build/task/buildModules.js",
-    "dev2": "rollup -c"
+    "dev": "rollup -c build/task/buildModules.js"
   },
   "keywords": [
     "helpers"
