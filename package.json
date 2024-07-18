@@ -5,7 +5,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "rollup -c build/task/buildModules.js"
+    "dev": "rollup -c build/task/buildModules.js",
+    "build": "npm run cleanDist && npm run buildModules && npm run buildType",
+    "buildModules": "rollup -c build/task/buildModules.js",
+    "buildType": "rollup -c build/task/buildType.js",
+    "cleanDist": "rimraf dist"
   },
   "keywords": [
     "helpers"
@@ -20,19 +24,14 @@
     "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-terser": "^0.4.4",
-    "concurrently": "^8.2.2",
     "esbuild": "^0.23.0",
     "glob": "^11.0.0",
-    "gulp": "^5.0.0",
+    "rimraf": "^6.0.1",
     "rollup": "^4.18.0",
-    "rollup-plugin-bundle-size": "^1.0.3",
-    "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-dts": "^6.1.1",
     "rollup-plugin-esbuild": "^6.1.1"
   },
   "dependencies": {
-    "@babel/runtime": "^7.24.8",
-    "@babel/runtime-corejs3": "^7.24.8",
-    "core-js": "^3.37.1"
+    "@babel/runtime-corejs3": "^7.24.8"
   }
 }
