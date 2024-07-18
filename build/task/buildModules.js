@@ -1,7 +1,7 @@
 
 import { defineConfig } from 'rollup'
 import nodeResolve from '@rollup/plugin-node-resolve'
-import babel, { getBabelOutputPlugin } from '@rollup/plugin-babel'
+import { getBabelOutputPlugin } from '@rollup/plugin-babel'
 import commonjs from '@rollup/plugin-commonjs'
 import esBuild, { minify as Minify } from 'rollup-plugin-esbuild'
 import del from 'rollup-plugin-delete'
@@ -87,6 +87,7 @@ export default defineConfig(
       ],
       external: [/@babel\/runtime/]
     }),
+    // TODO: umd和iife，babel处理了语法，但是没有polyfill
     ...buildConfig({
       input,
       output: {
