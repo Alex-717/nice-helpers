@@ -11,6 +11,12 @@
     "buildType": "rollup -c build/task/buildType.js",
     "cleanDist": "rimraf dist"
   },
+  "exports": {
+    ".": {
+      "import": "./dist/es/index.js",
+      "require": "./dist/lib/index.js"
+    }
+  },
   "keywords": [
     "helpers"
   ],
