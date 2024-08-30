@@ -9,7 +9,8 @@
     "build": "npm run cleanDist && npm run buildModules && npm run buildType",
     "buildModules": "rollup -c build/task/buildModules.js",
     "buildType": "rollup -c build/task/buildType.js",
-    "cleanDist": "rimraf dist"
+    "cleanDist": "rimraf dist",
+    "add": "node build/task/add.js"
   },
   "exports": {
     ".": {
