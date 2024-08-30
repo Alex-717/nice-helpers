@@ -3,7 +3,7 @@ import { defineConfig } from 'rollup'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import { getBabelOutputPlugin } from '@rollup/plugin-babel'
 import commonjs from '@rollup/plugin-commonjs'
-import esBuild, { minify as Minify } from 'rollup-plugin-esbuild'
+import esBuild from 'rollup-plugin-esbuild'
 import path from 'path'
 import terser from '@rollup/plugin-terser';
 import { projectRoot } from '../utils/path.js'

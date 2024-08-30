@@ -1,7 +1,9 @@
 
-export function isInBrowser () {
-  return typeof window !== 'undefined' && typeof window.document !== 'undefined'
-}
+// export function isInBrowser () {
+//   return typeof window !== 'undefined' && typeof window.document !== 'undefined'
+// }
+
+export const isInBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined'
 
 export function isTrue (v: any) {
   return v === true
