@@ -12,20 +12,14 @@ if (params.length > 1) throw new Error('存在多个参数')
 async function getAllExistFiles (filePath, resultArray = []) {
   try {
     const stats = await fs.promises.stat(filePath)
-    const isDir = stats.isDirectory()
-    if (isDir) {
+    if (stats.isDirectory()) {
       const files = await fs.promises.readdir(filePath)
       for (let file of files) {
-        const fileChild = filePath + path.sep + file
-        const stats = await fs.promises.stat(fileChild)
-        if (stats.isFile()) {
-          resultArray.push(path.basename(fileChild).split('.').shift())
-        } else {
-          await getAllExistFiles(fileChild, resultArray)
-        }
+        const fileChild = path.resolve(filePath, file)
+        await getAllExistFiles(fileChild, resultArray)
       }
     } else {
-      resultArray.push(path.basename(filePath).split('.').shift())
+      resultArray.push(path.basename(filePath, path.extname(filePath)))
     }
     return resultArray
   } catch (err) {
@@ -33,22 +27,18 @@ async function getAllExistFiles (filePath, resultArray = []) {
   }
 }
 
+/**
+ * 仅支持在src新增ts文件，不支持新增目录
+ */
 async function addFile () {
   const hasExistMethods = await getAllExistFiles(srcRoot)
   console.log('🚀', hasExistMethods)
-  let newFile = params[0].split('.').shift()
-  if (hasExistMethods.includes(newFile)) throw new Error('文件已存在')
-  const array = params[0].split('.')
-  if (!['js', 'ts'].includes(array[array.length-1])) {
-    array.push('ts')
-    newFile = array.join('.')
-  }
-  const newFilePath = srcRoot + path.sep + newFile
-  await fs.promises.writeFile(newFilePath, '')
-  await fs.promises.writeFile(srcRoot+path.sep+'index.ts', `\nexport * from './${newFile}'`, {
-    encoding: 'utf-8',
-    flag: 'a'
-  })
+  let addFileName = params[0]
+  const ext = path.extname(addFileName)
+  if (ext !== '.ts') addFileName += '.ts'
+  if (hasExistMethods.includes(path.basename(addFileName, '.ts'))) throw new Error('文件已存在')
+  await fs.promises.writeFile(path.resolve(srcRoot, addFileName), 'export default {}')
+  await fs.promises.writeFile(path.resolve(srcRoot, 'index.ts'), `\nexport * from './${path.basename(addFileName, '.ts')}'`, { flag: 'a' }) // append 追加
 }
 
 addFile()
