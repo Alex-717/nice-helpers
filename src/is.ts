@@ -54,3 +54,14 @@ export function toRawType (v: any) {
 export function hasOwnProp (obj: object | Array<any>, key: string) {
   return Object.prototype.hasOwnProperty.call(obj, key)
 }
+
+const mobileReg = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/
+export function isMobile (str: string) {
+  return mobileReg.test(str)
+}
+
+export function isEmail (str: string) {
+  const emailReg = /^\w+@\w+(\.\w+){1,2}$/
+  return emailReg.test(str)
+}
+
