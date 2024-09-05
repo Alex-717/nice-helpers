@@ -65,3 +65,6 @@ export function isEmail (str: string) {
   return emailReg.test(str)
 }
 
+export function isNative (Ctor: any) {
+  return typeof Ctor === 'function' && /native code/.test(Ctor.toString())
+}
