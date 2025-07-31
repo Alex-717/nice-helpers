@@ -4,6 +4,9 @@ export default defineConfig({
   title: 'Nice Helpers',
   description: 'A collection of useful JavaScript helper functions',
   base: '/nice-helpers/',
+  server: {
+    port: 5173
+  },
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },

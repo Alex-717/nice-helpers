@@ -6,5 +6,8 @@ export default defineConfig({
     alias: {
       'nice-helpers': path.resolve(__dirname, '../src/index.ts')
     }
+  },
+  server: {
+    port: 5174
   }
 })
