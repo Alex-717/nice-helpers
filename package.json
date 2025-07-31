@@ -10,7 +10,8 @@
     "buildModules": "rollup -c build/task/buildModules.js",
     "buildType": "rollup -c build/task/buildType.js",
     "cleanDist": "rimraf dist",
-    "add": "node build/task/add.js"
+    "add": "node build/task/add.js",
+    "del": "node build/task/del.js"
   },
   "exports": {
     ".": {
@@ -37,7 +38,8 @@
     "rimraf": "^6.0.1",
     "rollup": "^4.18.0",
     "rollup-plugin-dts": "^6.1.1",
-    "rollup-plugin-esbuild": "^6.1.1"
+    "rollup-plugin-esbuild": "^6.1.1",
+    "typescript": "^5.8.3"
   },
   "dependencies": {
     "@babel/runtime-corejs3": "^7.24.8"
