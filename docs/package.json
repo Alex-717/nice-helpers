@@ -1,0 +1,22 @@
+{
+  "name": "nice-helpers-docs",
+  "version": "1.0.0",
+  "description": "Documentation for nice-helpers library",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview"
+  },
+  "keywords": [
+    "vitepress",
+    "documentation",
+    "nice-helpers"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "vitepress": "^1.0.0"
+  }
+}

@@ -2,6 +2,26 @@
 
 这是一个工具库项目。
 
+## 文档
+
+项目的文档使用 VitePress 构建，位于 `docs` 目录下。可以通过以下命令启动文档开发服务器：
+
+```bash
+npm run docs:dev
+```
+
+构建文档网站：
+
+```bash
+npm run docs:build
+```
+
+预览构建后的文档网站：
+
+```bash
+npm run docs:preview
+```
+
 ## 新增工具函数
 
 运行以下命令可以在 `src` 目录下新增一个工具函数文件，并在 `test/src/cases` 目录下生成对应的测试文件：

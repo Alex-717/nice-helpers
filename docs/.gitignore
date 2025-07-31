@@ -1,0 +1,61 @@
+# VitePress build output
+.vitepress/dist
+
+# VitePress cache
+.vitepress/cache
+
+# Local configuration
+.vitepress/config.local.ts
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn workspaces
+.yarn/integrations
+.yarn/releases
+.yarn/plugins
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.yarn/version-branches
+
+# pnpm
+pnpm-lock.yaml
+
+# Editor directories and files
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw*
