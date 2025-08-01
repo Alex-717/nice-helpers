@@ -2,8 +2,8 @@
 import { defineConfig } from 'rollup'
 import { dts } from 'rollup-plugin-dts'
 import path from 'path'
-import { projectRoot } from '../utils/path.js'
-import { modulesInput } from '../utils/getInput.js'
+import { projectRoot } from '../utils/path.mjs'
+import { modulesInput } from '../utils/getInput.mjs'
 
 const distRoot = path.resolve(projectRoot, 'dist')
 

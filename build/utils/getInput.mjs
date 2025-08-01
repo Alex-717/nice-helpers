@@ -1,7 +1,7 @@
 
 import { globSync } from 'glob'
 import path from 'path'
-import { srcRoot, projectRoot } from './path.js'
+import { srcRoot, projectRoot } from './path.mjs'
 
 export const input = path.resolve(srcRoot, 'index.ts')
 

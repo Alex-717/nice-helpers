@@ -6,8 +6,8 @@ import commonjs from '@rollup/plugin-commonjs'
 import esBuild from 'rollup-plugin-esbuild'
 import path from 'path'
 import terser from '@rollup/plugin-terser';
-import { projectRoot } from '../utils/path.js'
-import { input, modulesInput } from '../utils/getInput.js'
+import { projectRoot } from '../utils/path.mjs'
+import { input, modulesInput } from '../utils/getInput.mjs'
 
 const distRoot = path.resolve(projectRoot, 'dist')
 

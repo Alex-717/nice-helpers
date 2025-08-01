@@ -1,17 +1,16 @@
 {
   "name": "nice-helpers",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "scripts": {
-    "dev": "rollup -c build/task/buildModules.js",
+    "dev": "rollup -c build/task/buildModules.mjs",
     "build": "npm run cleanDist && npm run buildModules && npm run buildType",
-    "buildModules": "rollup -c build/task/buildModules.js",
-    "buildType": "rollup -c build/task/buildType.js",
+    "buildModules": "rollup -c build/task/buildModules.mjs",
+    "buildType": "rollup -c build/task/buildType.mjs",
     "cleanDist": "rimraf dist",
-    "add": "node build/task/add.js",
-    "del": "node build/task/del.js"
+    "add": "node build/task/add.mjs",
+    "del": "node build/task/del.mjs"
   },
   "exports": {
     ".": {

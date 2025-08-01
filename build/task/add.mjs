@@ -1,6 +1,6 @@
 
 
-import { srcRoot, projectRoot } from "../utils/path.js"
+import { srcRoot, projectRoot } from "../utils/path.mjs"
 import fs from "fs"
 import path from "path"
 
