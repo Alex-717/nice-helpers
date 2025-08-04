@@ -3,6 +3,7 @@ import { defineConfig } from 'rollup'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import babel, { getBabelOutputPlugin } from '@rollup/plugin-babel'
 import commonjs from '@rollup/plugin-commonjs'
+import json from '@rollup/plugin-json'
 import esBuild from 'rollup-plugin-esbuild'
 import path from 'path'
 import terser from '@rollup/plugin-terser';
@@ -29,9 +30,11 @@ const bundleBabelConfig = [
   babel({
     babelHelpers: 'bundled',
     presets: [
-      ['@babel/preset-env', { 
-        // targets: 'chrome 58, firefox 57, safari 11, edge 16',
-        // modules: 'umd',
+      ['@babel/preset-env', {
+        targets: {
+          browsers: ['> 1%', 'last 2 versions', 'ie >= 11']
+        },
+        // modules: 'false',
         useBuiltIns: 'entry',
         corejs: 3
       }]
@@ -62,7 +65,7 @@ export default defineConfig(
       plugins: [
         ...moduleBabelConfig
       ],
-      external: [/@babel\/runtime/],
+      external: [/@babel\/runtime/, 'axios'],
       cleanDist: true
     }),
     ...buildConfig({
@@ -76,7 +79,7 @@ export default defineConfig(
       plugins: [
         ...moduleBabelConfig
       ],
-      external: [/@babel\/runtime/]
+      external: [/@babel\/runtime/, 'axios']
     }),
     ...buildConfig({
       input,
@@ -84,11 +87,15 @@ export default defineConfig(
         file: `${distRoot}/index.js`,
         format: 'umd',
         name: 'niceHelpers',
-        exports: 'named'
+        exports: 'named',
+        globals: {
+          'axios': 'axios'
+        }
       },
       plugins: [
         ...bundleBabelConfig
-      ]
+      ],
+      external: ['axios']
     }),
     ...buildConfig({
       input,
@@ -96,27 +103,34 @@ export default defineConfig(
         file: `${distRoot}/index.min.js`,
         format: 'iife',
         name: 'niceHelpers',
-        exports: 'named'
+        exports: 'named',
+        globals: {
+          'axios': 'axios'
+        }
       },
       plugins: [
         ...bundleBabelConfig
       ],
-      minify: true
+      external: ['axios'],
+      minify: true,
+      isBrowser: true
     })
 ])
 
 function buildConfig (options) {
-  const { minify = false, cleanDist = false, ...config } = options
+  const { minify = false, cleanDist = false, isBrowser = false, ...config } = options
+  const nodeResolveConfig = {
+    extensions: ['.ts', '.js']
+  }
+  if (isBrowser)
+    nodeResolveConfig.browser = true
   const rollupConfig = {
     input: config.input,
     output: config.output,
     plugins: [
-      nodeResolve(
-        {
-          extensions: ['.ts', '.js']
-        }
-      ),
+      nodeResolve(nodeResolveConfig),
       commonjs(),
+      json(),
       minify && terser(),
       ...(config.plugins || []),
       esBuild({

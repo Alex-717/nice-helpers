@@ -32,9 +32,11 @@
     "@babel/preset-env": "^7.24.8",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-terser": "^0.4.4",
     "@types/node": "^22.5.3",
+    "axios": "^1.11.0",
     "esbuild": "^0.23.0",
     "glob": "^11.0.0",
     "magic-string": "^0.30.17",
@@ -46,9 +48,13 @@
   },
   "dependencies": {
     "@babel/runtime-corejs3": "^7.24.8",
-    "core-js": "^3.44.0"
+    "core-js": "^3.44.0",
+    "regenerator-runtime": "^0.14.1"
   },
   "engines": {
     "node": ">=16"
+  },
+  "peerDependencies": {
+    "axios": "^1.0.0"
   }
 }
