@@ -1,13 +1,14 @@
 
 import { defineConfig } from 'rollup'
 import nodeResolve from '@rollup/plugin-node-resolve'
-import { getBabelOutputPlugin } from '@rollup/plugin-babel'
+import babel, { getBabelOutputPlugin } from '@rollup/plugin-babel'
 import commonjs from '@rollup/plugin-commonjs'
 import esBuild from 'rollup-plugin-esbuild'
 import path from 'path'
 import terser from '@rollup/plugin-terser';
 import { projectRoot } from '../utils/path.mjs'
 import { input, modulesInput } from '../utils/getInput.mjs'
+import addPolyfillImports from '../utils/plugins/add-polyfill-imports.mjs'
 
 const distRoot = path.resolve(projectRoot, 'dist')
 
@@ -25,13 +26,25 @@ const moduleBabelConfig = [
   })
 ]
 const bundleBabelConfig = [
-  getBabelOutputPlugin({
-    allowAllFormats: true,
+  babel({
+    babelHelpers: 'bundled',
     presets: [
       ['@babel/preset-env', { 
-        modules: 'umd'
+        // targets: 'chrome 58, firefox 57, safari 11, edge 16',
+        // modules: 'umd',
+        useBuiltIns: 'entry',
+        corejs: 3
       }]
     ]
+  }),
+  addPolyfillImports({
+    imports: [
+      'core-js/stable',
+      'regenerator-runtime/runtime'
+    ],
+    include: ['src/index.ts'],
+    position: 'top',
+    skipIfExists: true
   })
 ]
 
@@ -65,7 +78,6 @@ export default defineConfig(
       ],
       external: [/@babel\/runtime/]
     }),
-    // TODO: umd和iife，babel处理了语法，但是没有polyfill
     ...buildConfig({
       input,
       output: {
@@ -86,9 +98,9 @@ export default defineConfig(
         name: 'niceHelpers',
         exports: 'named'
       },
-      // plugins: [
-      //   ...bundleBabelConfig
-      // ],
+      plugins: [
+        ...bundleBabelConfig
+      ],
       minify: true
     })
 ])
