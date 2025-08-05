@@ -111,9 +111,9 @@ export default defineConfig(
       plugins: [
         ...bundleBabelConfig
       ],
-      external: ['axios'],
       minify: true,
-      isBrowser: true
+      isBrowser: true,
+      external: ['axios']
     })
 ])
 

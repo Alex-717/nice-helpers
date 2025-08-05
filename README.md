@@ -25,7 +25,7 @@ const request = nRequest()
 
 ```html
 <!-- 如果需要使用 nRequest 函数，必须先引入 axios -->
-<script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/1.11.0/axios.min.js"></script>
 
 <!-- 引入 nice-helpers -->
 <script src="https://cdn.jsdelivr.net/npm/nice-helpers@latest/dist/index.js"></script>
