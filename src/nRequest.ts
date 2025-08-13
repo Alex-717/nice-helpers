@@ -131,7 +131,7 @@ export function nRequest (config: INRequestConfig): any {
       updateCache(cacheKey, res)
       // cache.set(cacheKey, res)
     }
-    return res
+    return res.data
   }).catch(err => {
     if (retry && shouldRetry(err)) {
       return nRequest({

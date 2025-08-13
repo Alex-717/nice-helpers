@@ -1,8 +1,9 @@
 {
   "name": "nice-helpers",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/lib/index.js",
+  "module": "./dist/es/index.js",
   "scripts": {
     "dev": "rollup -c build/task/buildModules.mjs",
     "build": "npm run cleanDist && npm run buildModules && npm run buildType",
