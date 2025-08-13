@@ -65,7 +65,7 @@ export default defineConfig(
       plugins: [
         ...moduleBabelConfig
       ],
-      external: [/@babel\/runtime/, 'axios'],
+      external: [/@babel\/runtime/, 'axios', 'crypto-js'],
       cleanDist: true
     }),
     ...buildConfig({
@@ -79,7 +79,8 @@ export default defineConfig(
       plugins: [
         ...moduleBabelConfig
       ],
-      external: [/@babel\/runtime/, 'axios']
+      external: [/@babel\/runtime/, 'axios', 'crypto-js']
+
     }),
     ...buildConfig({
       input,
@@ -89,13 +90,15 @@ export default defineConfig(
         name: 'niceHelpers',
         exports: 'named',
         globals: {
-          'axios': 'axios'
+          'axios': 'axios',
+          'crypto-js': 'CryptoJS'
         }
       },
       plugins: [
         ...bundleBabelConfig
       ],
-      external: ['axios']
+      external: ['axios', 'crypto-js']
+
     }),
     ...buildConfig({
       input,
@@ -105,7 +108,8 @@ export default defineConfig(
         name: 'niceHelpers',
         exports: 'named',
         globals: {
-          'axios': 'axios'
+          'axios': 'axios',
+          'crypto-js': 'CryptoJS'
         }
       },
       plugins: [
@@ -113,7 +117,7 @@ export default defineConfig(
       ],
       minify: true,
       isBrowser: true,
-      external: ['axios']
+      external: ['axios', 'crypto-js']
     })
 ])
 

@@ -24,9 +24,9 @@ const request = nRequest()
 在浏览器中使用时，可以通过 CDN 或本地文件引入：
 
 ```html
-<!-- 如果需要使用 nRequest 函数，必须先引入 axios -->
+<!-- 如果需要使用 nRequest 函数，必须先引入 axios, crypto-js  -->
 <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.11.0/axios.min.js"></script>
-
+<script src="https://cdn.bootcdn.net/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
 <!-- 引入 nice-helpers -->
 <script src="https://cdn.jsdelivr.net/npm/nice-helpers@latest/dist/index.js"></script>
 

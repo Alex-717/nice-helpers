@@ -36,7 +36,8 @@ export default defineConfig({
             { text: 'urlParams', link: '/api/urlParams' },
             { text: 'runMicroTask', link: '/api/runMicroTask' },
             { text: 'deepClone', link: '/api/deepClone' },
-            { text: 'getObjVal', link: '/api/getObjVal' }
+            { text: 'getObjVal', link: '/api/getObjVal' },
+            { text: 'nRequest', link: '/api/nRequest' }
           ]
         }
       ]

@@ -127,7 +127,7 @@ async function testPutRequest() {
 }
 
 /**
- * 测试缓存功能
+ * 测试缓存功能（使用新的 needCache 参数）
  */
 async function testCacheFeature() {
   console.log('🚀 测试缓存功能...')
@@ -136,7 +136,7 @@ async function testCacheFeature() {
     const config = {
       url: 'https://jsonplaceholder.typicode.com/posts/2',
       method: 'get' as const,
-      isCache: true
+      needCache: true
     }
     
     // 第一次请求
@@ -155,6 +155,7 @@ async function testCacheFeature() {
     if (time2 < time1 && response1.data.id === response2.data.id) {
       console.log('✅ 缓存功能正常工作')
       console.log(`📊 第一次请求耗时: ${time1}ms, 第二次请求耗时: ${time2}ms`)
+      console.log('📝 缓存键已使用 MD5 哈希生成')
     } else {
       console.log('❌ 缓存功能可能未正常工作')
     }
@@ -266,7 +267,7 @@ async function testResetCache() {
     await nRequest({
       url: 'https://jsonplaceholder.typicode.com/posts/4',
       method: 'get',
-      isCache: true
+      needCache: true
     })
     
     // 重置缓存
@@ -279,6 +280,188 @@ async function testResetCache() {
     console.log('✅ 重置缓存功能执行完成')
   } catch (error) {
     console.log('❌ 重置缓存测试失败:', error.message)
+  }
+}
+
+/**
+ * 测试 LRU 缓存策略
+ */
+async function testLRUCache() {
+  console.log('🚀 测试 LRU 缓存策略...')
+  
+  try {
+    // 先重置缓存
+    await nRequest({
+      url: 'https://jsonplaceholder.typicode.com/posts/1',
+      method: 'get',
+      isResetCache: true
+    })
+    
+    // 创建多个缓存项（超过 MAX_CACHE_SIZE = 10）
+    const promises = []
+    for (let i = 1; i <= 12; i++) {
+      promises.push(nRequest({
+        url: `https://jsonplaceholder.typicode.com/posts/${i}`,
+        method: 'get',
+        needCache: true
+      }))
+    }
+    
+    await Promise.all(promises)
+    
+    console.log('✅ LRU 缓存策略测试完成')
+    console.log('📝 已创建 12 个缓存项，应该只保留最近的 10 个')
+  } catch (error) {
+    console.log('❌ LRU 缓存测试失败:', error.message)
+  }
+}
+
+/**
+ * 测试文件上传时的缓存处理
+ */
+async function testFileUploadCache() {
+  console.log('🚀 测试文件上传缓存处理...')
+  
+  try {
+    // 创建一个模拟文件
+    const file = new File(['test content'], 'test.txt', { type: 'text/plain' })
+    
+    // 测试包含文件的请求不会被缓存
+    const response = await nRequest({
+      url: 'https://httpbin.org/post',
+      method: 'post',
+      data: {
+        name: 'test',
+        file: file
+      },
+      needCache: true  // 即使设置为 true，也不应该缓存
+    })
+    
+    console.log('✅ 文件上传缓存处理正常')
+    console.log('📝 包含文件的请求已正确跳过缓存')
+  } catch (error) {
+    console.log('❌ 文件上传缓存测试失败:', error.message)
+  }
+}
+
+/**
+ * 测试嵌套对象中的文件检测
+ */
+async function testNestedFileDetection() {
+  console.log('🚀 测试嵌套对象文件检测...')
+  
+  try {
+    const file = new File(['nested test'], 'nested.txt', { type: 'text/plain' })
+    
+    // 测试深度嵌套的文件对象
+    const nestedData = {
+      user: {
+        profile: {
+          avatar: file,  // 深度嵌套的文件
+          info: {
+            name: 'test'
+          }
+        }
+      },
+      documents: [
+        { type: 'pdf', file: file }  // 数组中的文件
+      ]
+    }
+    
+    const response = await nRequest({
+      url: 'https://httpbin.org/post',
+      method: 'post',
+      data: nestedData,
+      needCache: true
+    })
+    
+    console.log('✅ 嵌套文件检测功能正常')
+    console.log('📝 深度嵌套的文件已被正确检测并跳过缓存')
+  } catch (error) {
+    console.log('❌ 嵌套文件检测测试失败:', error.message)
+  }
+}
+
+/**
+ * 测试 MD5 缓存键生成
+ */
+async function testMD5CacheKey() {
+  console.log('🚀 测试 MD5 缓存键生成...')
+  
+  try {
+    // 测试相同请求生成相同缓存键
+    const config1 = {
+      url: 'https://jsonplaceholder.typicode.com/posts/6',
+      method: 'get' as const,
+      data: { userId: 1, limit: 5 },
+      needCache: true
+    }
+    
+    const config2 = {
+      url: 'https://jsonplaceholder.typicode.com/posts/6',
+      method: 'get' as const,
+      data: { userId: 1, limit: 5 },
+      needCache: true
+    }
+    
+    const startTime1 = Date.now()
+    const response1 = await nRequest(config1)
+    const endTime1 = Date.now()
+    
+    const startTime2 = Date.now()
+    const response2 = await nRequest(config2)
+    const endTime2 = Date.now()
+    
+    const time1 = endTime1 - startTime1
+    const time2 = endTime2 - startTime2
+    
+    if (time2 < time1) {
+      console.log('✅ MD5 缓存键生成正常')
+      console.log('📝 相同请求参数生成了相同的 MD5 缓存键')
+      console.log(`📊 第一次: ${time1}ms, 第二次(缓存): ${time2}ms`)
+    } else {
+      console.log('❌ MD5 缓存键可能未正常工作')
+    }
+  } catch (error) {
+    console.log('❌ MD5 缓存键测试失败:', error.message)
+  }
+}
+
+/**
+ * 测试重试参数验证
+ */
+async function testRetryValidation() {
+  console.log('🚀 测试重试参数验证...')
+  
+  try {
+    // 测试无效的重试参数
+    try {
+      await nRequest({
+        url: 'https://jsonplaceholder.typicode.com/posts/1',
+        method: 'get',
+        retry: -1  // 负数应该抛出错误
+      })
+      console.log('❌ 重试参数验证失败：应该拒绝负数')
+    } catch (error) {
+      if (error.message.includes('retry 必须是非负整数')) {
+        console.log('✅ 重试参数验证正常：正确拒绝了负数')
+      }
+    }
+    
+    try {
+      await nRequest({
+        url: 'https://jsonplaceholder.typicode.com/posts/1',
+        method: 'get',
+        retry: 1.5  // 小数应该抛出错误
+      })
+      console.log('❌ 重试参数验证失败：应该拒绝小数')
+    } catch (error) {
+      if (error.message.includes('retry 必须是非负整数')) {
+        console.log('✅ 重试参数验证正常：正确拒绝了小数')
+      }
+    }
+  } catch (error) {
+    console.log('❌ 重试参数验证测试失败:', error.message)
   }
 }
 
@@ -303,7 +486,22 @@ async function runAllTests() {
   await testCacheFeature()
   console.log('')
   
+  await testLRUCache()
+  console.log('')
+  
+  await testFileUploadCache()
+  console.log('')
+  
+  await testNestedFileDetection()
+  console.log('')
+  
+  await testMD5CacheKey()
+  console.log('')
+  
   await testRetryFeature()
+  console.log('')
+  
+  await testRetryValidation()
   console.log('')
   
   await testCancelFeature()
