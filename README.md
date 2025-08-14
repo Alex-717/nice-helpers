@@ -39,7 +39,7 @@ const request = nRequest()
 ```
 
 **重要提示**：
-- 如果使用 `dist/index.js` 或 `dist/index.min.js` 中的 `nRequest` 函数，必须先引入 `axios` 作为依赖
+- 如果使用 `dist/index.js` 或 `dist/index.min.js` 中的 `nRequest` 函数，必须先引入 `axios` 等外部依赖库
 - 其他工具函数（如 `deepClone`、`getObjVal` 等）可以独立使用，无需额外依赖
 
 ## 文档

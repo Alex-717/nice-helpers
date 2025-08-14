@@ -12,8 +12,9 @@
  * const objWithArray = { a: [{ b: { c: 'arrayValue' } }] }
  * getObjVal(objWithArray, 'a[0].b.c', null) // 'arrayValue'
  */
+import { toRawType } from './is'
 export function getObjVal(obj: any, path: string, defaultValue: any): any {
-  if (!obj || typeof path !== 'string' || path.trim() === '') {
+  if (toRawType(obj) !== 'object' || typeof path !== 'string' || path.trim() === '') {
     return defaultValue
   }
 

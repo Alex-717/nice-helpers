@@ -148,7 +148,7 @@ function shouldCache (data: any) {
   try {
     JSON.stringify(data)
   } catch (err) {
-    console.warn('postData可能存在循环引用，请检查')
+    console.warn('postData可能存在循环引用，不支持缓存，请检查')
     return false
   }
   // data传进来一般是个对象
@@ -181,12 +181,12 @@ function createCacheKey (url: string, method: string, data: any): string {
   const baseKey = `${url}-${method}`
   if (!data) {
     cacheKey = cryptoJs.MD5(baseKey).toString()
-    console.log('cacheKey:', cacheKey)
+    // console.log('cacheKey:', cacheKey)
     return cacheKey
   }
-  const dataStr = JSON.stringify(data)
-  cacheKey = cryptoJs.MD5(`${baseKey}-${dataStr}`).toString()
-  console.log('cacheKey:', cacheKey)
+  const dataKey = JSON.stringify(data)
+  cacheKey = cryptoJs.MD5(`${baseKey}-${dataKey}`).toString()
+  // console.log('cacheKey:', cacheKey)
   return cacheKey
 }
 

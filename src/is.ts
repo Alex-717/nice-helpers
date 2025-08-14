@@ -97,7 +97,7 @@ export function isPromise (v: any): v is Promise<any> {
  * @returns 返回值的原始类型字符串，如 'string', 'number', 'object', 'array' 等
  */
 export function toRawType (v: any) {
-  return Object.prototype.toString.call(v).slice(8, -1).toLocaleLowerCase()
+  return Object.prototype.toString.call(v).slice(8, -1).toLowerCase()
 }
 
 /**

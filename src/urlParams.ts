@@ -42,7 +42,7 @@ export const setParam = (function () {
     return setParamByReg
   }
 })();
-function setParamByURL (name: string, val: string, url: string) {
+function setParamByURL (name: string, val: string, url?: string) {
   const urlStr = url ? url : hasLocation ? location.href : ''
   if (!urlStr) return false
   const urlObj = new URL(urlStr)
@@ -52,7 +52,7 @@ function setParamByURL (name: string, val: string, url: string) {
 }
 
 // 已有参数就更新，没有则添加
-function setParamByReg (name: string, val: string, url: string) {
+function setParamByReg (name: string, val: string, url?: string) {
   const urlStr = url ? url : hasLocation ? location.href : ''
   if (!urlStr) return false
   const reg = new RegExp(`(\\?|&)${name}=.*?(&|#|$)`)
